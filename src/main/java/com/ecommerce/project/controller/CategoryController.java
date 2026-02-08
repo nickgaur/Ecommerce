@@ -2,12 +2,14 @@ package com.ecommerce.project.controller;
 
 import com.ecommerce.project.model.Category;
 import com.ecommerce.project.services.CategoryService;
-import jakarta.persistence.Access;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 //@RequestMapping("/")
@@ -20,26 +22,33 @@ public class CategoryController {
     }
 
     @GetMapping("/api/public/categories")
-    public List getCategory() {
-        return categoryService.getAllCategories();
+    public ResponseEntity<List<Category>> getCategory() {
+        return new ResponseEntity<>(categoryService.getAllCategories(), HttpStatus.OK);
     }
 
     @PostMapping("/api/public/categories")
-    public String createCategory(@RequestBody Category category){
+    public ResponseEntity<String> createCategory(@RequestBody Category category){
         try{
             categoryService.createCategory(category);
-            return "New Category Created";
+            return new ResponseEntity<>("Category added successfully", HttpStatus.CREATED);
         }
-        catch (Exception e){
-            System.out.println(e);
-            throw new RuntimeException();
+        catch (ResponseStatusException e){
+            return new ResponseEntity<>(e.getReason(), HttpStatus.BAD_REQUEST);
 
         }
     }
 
     @DeleteMapping("/api/admin/categories/{categoryId}")
-    public String deleteCategory(@PathVariable Long categoryId){
-        return categoryService.deleteCategory(categoryId);
+    public ResponseEntity<String> deleteCategory(@PathVariable Long categoryId){
+        try{
+            String status = categoryService.deleteCategory(categoryId);
+//            return ResponseEntity.ok(status);
+//            return ResponseEntity.status(HttpStatus.OK).body(status);
+            return new ResponseEntity<>(status, HttpStatus.OK);
+        }
+        catch (ResponseStatusException e){
+            return new ResponseEntity<>(e.getReason(),HttpStatus.NOT_FOUND);
+        }
 
     }
 }
