@@ -15,7 +15,7 @@ import java.util.Locale;
 //@RequestMapping("/")
 public class CategoryController {
     private CategoryService categoryService;
-    private int id=-1;
+    private int id = -1;
 
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
@@ -24,31 +24,39 @@ public class CategoryController {
     @GetMapping("/api/public/categories")
     public ResponseEntity<List<Category>> getCategory() {
         return new ResponseEntity<>(categoryService.getAllCategories(), HttpStatus.OK);
+
     }
 
     @PostMapping("/api/public/categories")
-    public ResponseEntity<String> createCategory(@RequestBody Category category){
-        try{
+    public ResponseEntity<String> createCategory(@RequestBody Category category) {
+        try {
             categoryService.createCategory(category);
             return new ResponseEntity<>("Category added successfully", HttpStatus.CREATED);
-        }
-        catch (ResponseStatusException e){
+        } catch (ResponseStatusException e) {
             return new ResponseEntity<>(e.getReason(), HttpStatus.BAD_REQUEST);
 
         }
     }
 
     @DeleteMapping("/api/admin/categories/{categoryId}")
-    public ResponseEntity<String> deleteCategory(@PathVariable Long categoryId){
-        try{
+    public ResponseEntity<String> deleteCategory(@PathVariable Long categoryId) {
+        try {
             String status = categoryService.deleteCategory(categoryId);
 //            return ResponseEntity.ok(status);
 //            return ResponseEntity.status(HttpStatus.OK).body(status);
             return new ResponseEntity<>(status, HttpStatus.OK);
+        } catch (ResponseStatusException e) {
+            return new ResponseEntity<>(e.getReason(), HttpStatus.NOT_FOUND);
         }
-        catch (ResponseStatusException e){
-            return new ResponseEntity<>(e.getReason(),HttpStatus.NOT_FOUND);
-        }
+    }
 
+    @PutMapping("/api/public/categories/{categoryId}")
+    public ResponseEntity<String> updateCategory(@PathVariable Long categoryId, @RequestBody Category category) {
+        try {
+            Category updatedCategory = categoryService.updateCategory(categoryId, category);
+            return new ResponseEntity<>("Category Updated Successfully", HttpStatus.OK);
+        } catch (ResponseStatusException e) {
+           return new ResponseEntity<>(e.getReason(), HttpStatus.NOT_FOUND);
+        }
     }
 }
