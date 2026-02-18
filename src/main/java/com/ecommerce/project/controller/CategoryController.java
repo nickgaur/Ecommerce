@@ -1,15 +1,14 @@
 package com.ecommerce.project.controller;
 
+import com.ecommerce.project.config.AppConstants;
 import com.ecommerce.project.model.Category;
+import com.ecommerce.project.payload.CategoryDTO;
+import com.ecommerce.project.payload.CategoryResponse;
 import com.ecommerce.project.services.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 @RestController
 @RequestMapping("/api")
@@ -22,41 +21,53 @@ public class CategoryController {
     }
 
     @GetMapping("/public/categories")
-    public ResponseEntity<List<Category>> getCategory() {
-        return new ResponseEntity<>(categoryService.getAllCategories(), HttpStatus.OK);
+    public ResponseEntity<CategoryResponse> getCategory(
+            @RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(name = "sortBy", defaultValue = AppConstants.SORT_CATEGORIES_BY, required = false) String sortBy,
+            @RequestParam(name = "sortOrder", defaultValue = AppConstants.SORT_DIR, required = false) String sortOrder
+    ) {
+//        try{
+//            return new ResponseEntity<>(categoryService.getAllCategories(), HttpStatus.OK);
+        CategoryResponse categoryResponse = categoryService.getAllCategories(pageNumber, pageSize, sortBy, sortOrder);
+        return new ResponseEntity<>(categoryResponse, HttpStatus.OK);
+//        }
+//        catch (EmptyResultException e){
+//            return new ResponseEntity<String>(e.getMessage, HttpStatus.NO_CONTENT);
+//        }
 
     }
 
     @PostMapping("/public/categories")
-    public ResponseEntity<String> createCategory(@RequestBody Category category) {
-        try {
-            categoryService.createCategory(category);
-            return new ResponseEntity<>("Category added successfully", HttpStatus.CREATED);
-        } catch (ResponseStatusException e) {
-            return new ResponseEntity<>(e.getReason(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<String> createCategory(@Valid @RequestBody CategoryDTO categoryDTO) {
+//        try {
+        categoryService.createCategory(categoryDTO);
+        return new ResponseEntity<>("Category added successfully", HttpStatus.CREATED);
+//        } catch (ResponseStatusException e) {
+//            return new ResponseEntity<>(e.getReason(), HttpStatus.BAD_REQUEST);
 
-        }
+//        }
     }
 
     @DeleteMapping("/admin/categories/{categoryId}")
-    public ResponseEntity<String> deleteCategory(@PathVariable Long categoryId) {
-        try {
-            String status = categoryService.deleteCategory(categoryId);
+    public ResponseEntity<CategoryDTO> deleteCategory(@PathVariable Long categoryId) {
+//        try {
+        CategoryDTO categoryDTO = categoryService.deleteCategory(categoryId);
 //            return ResponseEntity.ok(status);
 //            return ResponseEntity.status(HttpStatus.OK).body(status);
-            return new ResponseEntity<>(status, HttpStatus.OK);
-        } catch (ResponseStatusException e) {
-            return new ResponseEntity<>(e.getReason(), HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(categoryDTO, HttpStatus.OK);
+//        } catch (ResponseStatusException e) {
+//            return new ResponseEntity<>(e.getReason(), HttpStatus.NOT_FOUND);
+//        }
     }
 
     @PutMapping("/public/categories/{categoryId}")
-    public ResponseEntity<String> updateCategory(@PathVariable Long categoryId, @RequestBody Category category) {
-        try {
-            Category updatedCategory = categoryService.updateCategory(categoryId, category);
-            return new ResponseEntity<>("Category Updated Successfully", HttpStatus.OK);
-        } catch (ResponseStatusException e) {
-           return new ResponseEntity<>(e.getReason(), HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Long categoryId, @RequestBody CategoryDTO categoryDTO) {
+//        try {
+        CategoryDTO savedCategoryDTO = categoryService.updateCategory(categoryId, categoryDTO);
+        return new ResponseEntity<>(savedCategoryDTO, HttpStatus.OK);
+//        } catch (ResponseStatusException e) {
+//           return new ResponseEntity<>(e.getReason(), HttpStatus.NOT_FOUND);
+//        }
     }
 }
