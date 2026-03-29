@@ -1,0 +1,84 @@
+4 types of framework to interact with Database
+-------------------------------------------------
+	a. JDBC
+		i. Need to Write more SQL Queries
+		ii. And write a lot of java code.
+	b. Spring JDBC
+		i. Write a lot of SQL Queries
+		ii. But Lesser java code
+
+	c. JPA
+		i. Do not worry about queries.
+		ii. Just Map Entities to Tables.
+
+	d. Spring Data JPA
+		i. Let's make JPA even more simple.
+		ii. I will take care of everything.
+
+
+For enabling JDBC
+-------------------
+	Go to application.properties >
+	spring.application.name=sb.ecom
+	spring.ina.defer-datasource-initialization=true
+	spring.h2.console.enabled=true
+	spring.datasource.url=jdbc:h2:mem:test
+	spring.ina.show.sgl=true
+	spring.ipa.properties.hibernate.foctoat..sql=true
+	
+=> JdbcTemplate is used to fire SQL queries in Jdbc
+
+=> @Repository is used to make class talk to a database
+
+=> Update is used to insert, delete & update.
+
+JPA
+------
+	In JPA, Java Bean (Java Class) acts as a Entity (DB Table)
+
+
+Spring Data JPA
+----------------
+	Let's make JPA even more simple.
+	I will take care of everything.
+
+
+@RequestMapping("")
+--------------------
+	@RequestMapping (Class Level) => this annotation is used for mapping all the request starting with the value passed in it. E.g. @RequestMapping("/api/v1"). It can be treated as a base Route.
+	@RequestMapping (Method Level) => This is used to define the method and endpoint. E.g. @RequestMapping(value="/api/categories", method=RequestMethod.GET)
+
+
+ORM
+----
+	ORM is used to interact with database without using any query. There are pre-defined methods to perform tasks in DataBase. E.g. Mongoose.
+
+
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+-------------------------------------------------------
+	It auto generates unique value for Primary Key in Database.
+
+Lombok
+-------
+it reduces boilerplate code by using appropriate annotations.
+For ex: if you want to generate getter & setter, use @Getter/@Setter annotation provided by Lombok.
+
+Validators
+------------
+@NotNull(message="")
+@NotEmpty(message="")
+@Email(message="")
+@Size(min, max, message="")
+@Min(value) & @Max(Value)
+
+@RequestParam
+---------------
+This is used to fetch the query parameters. E.g. <BASE_URL>/api/echo?message="Hi" public String printMessage(@RequestParam(name="message", required=false) String message){}
+
+@RequestBody
+-------------
+This is used to fetch the Body parameters.
+
+@PathVariable
+--------------
+This is used to fetch the dynamic endpoint. Eg: <BASE_URL>/api/public/{categoryID}
