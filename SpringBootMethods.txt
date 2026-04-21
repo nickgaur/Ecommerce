@@ -22,6 +22,7 @@ For enabling JDBC
 	spring.application.name=sb.ecom
 	spring.ina.defer-datasource-initialization=true
 	spring.h2.console.enabled=true
+	server.port=9999
 	spring.datasource.url=jdbc:h2:mem:test
 	spring.ina.show.sgl=true
 	spring.ipa.properties.hibernate.foctoat..sql=true
@@ -82,3 +83,41 @@ This is used to fetch the Body parameters.
 @PathVariable
 --------------
 This is used to fetch the dynamic endpoint. Eg: <BASE_URL>/api/public/{categoryID}
+
+
+In Memory Authentication
+--------------------------
+In-memory authentication in Spring Security is a method of storing user credentials (username, password, roles) directly in the application's volatile memory rather than a database. It is primarily designed for development, testing, and prototyping because user details are lost when the server restarts.
+
+{noop} Prefix
+--------------
+In Spring Security, (noop} refers to a special prefix used to designate the NoOpPasswordEncoder, a password encoder that does not perform any actual password encoding or hashing. It is provided for legacy and testing purposes only and is highly insecure for production environments.
+
+
+JwtUtils
+----------
+Contains utility method for generating, parsing, and validating JWTs.
+Include Generating a token from a username, validating a JWT, and extracting the username from a token.
+
+AuthTokenFilter
+----------------
+Filters incoming requests to check for a valid JWT in the header, Setting the authentication context if the token is valid.
+Extracts JWT from a request header, validates it, and configures the Spring Security context with user details if the token is valid.
+
+AuthEntryPointJwt
+------------------
+Provides custom handling for uauthorized requests, typically when authentication is required but not supplied or valid.
+When an unauthorized request is detected, it logs the error and returns a JSON response with an error message, status code, and the path attempted.
+
+SecurityConfig
+---------------
+Configures Spring Security filters and rules for the application.
+Sets Up the security filter chain, permitting or denying access based on paths and roles. It also configures session management to stateless, which is crucial for JWT usage.
+
+requests.requestMatcher("/signin").permitAll() {SecutityConfig.java}
+--------------------------------------------------------------------------
+requestMatcher().permitAll() is used to bypass the endpoint we passed in requestMatcher without any authentication. Else all the endpoints are secured and requires authentication.
+
+anyRequest().authenticated()
+-----------------------------
+This is responsible to secure all endpoints. Any incoming request requires authentication.
