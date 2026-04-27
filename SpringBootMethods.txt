@@ -121,3 +121,7 @@ requestMatcher().permitAll() is used to bypass the endpoint we passed in request
 anyRequest().authenticated()
 -----------------------------
 This is responsible to secure all endpoints. Any incoming request requires authentication.
+
+ophanRemoval= true
+--------------------
+orphanRemoval is being used with @OneToMany(), If any user is removed, So all products/child entities become orphan. In that case orphanRemoval removes all the child entities associated with that user.
