@@ -106,7 +106,7 @@ Extracts JWT from a request header, validates it, and configures the Spring Secu
 
 AuthEntryPointJwt
 ------------------
-Provides custom handling for uauthorized requests, typically when authentication is required but not supplied or valid.
+Provides custom handling for unauthorized requests, typically when authentication is required but not supplied or valid.
 When an unauthorized request is detected, it logs the error and returns a JSON response with an error message, status code, and the path attempted.
 
 SecurityConfig
@@ -121,3 +121,11 @@ requestMatcher().permitAll() is used to bypass the endpoint we passed in request
 anyRequest().authenticated()
 -----------------------------
 This is responsible to secure all endpoints. Any incoming request requires authentication.
+
+ophanRemoval= true
+--------------------
+orphanRemoval is being used with @OneToMany(), If any user is removed, So all products/child entities become orphan. In that case orphanRemoval removes all the child entities associated with that user.
+
+@Transactional
+---------------
+Transactional ensures that entire operation (CRUD) is handled as a transaction meaning it can be either completed or rolled back in case of any error.
