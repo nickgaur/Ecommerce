@@ -129,3 +129,12 @@ orphanRemoval is being used with @OneToMany(), If any user is removed, So all pr
 @Transactional
 ---------------
 Transactional ensures that entire operation (CRUD) is handled as a transaction meaning it can be either completed or rolled back in case of any error.
+
+WebSecurityCustomizer
+-----------------------
+WebSecurityCustomizer is used to bypass the spring security for the URLs with following patterns.
+
+Difference between WebSecurityCutomizer & FilterChain
+-----------------------------------------------------------------
+WebSecurityCustomizer defined at Global level which completely bypass the spring security. i.e. Spirng security will never come into picture for the defined URLs.
+whereas, FilterChain creates set of rules in which first spring security comes into picture and checks whether the url is accessible to public and whether it requires authentication or permit to all.
