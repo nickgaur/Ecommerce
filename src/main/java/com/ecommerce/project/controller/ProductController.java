@@ -18,7 +18,7 @@ import java.io.IOException;
 public class ProductController {
 
     @Autowired
-    ProductService productService;
+    private ProductService productService;
 
     @GetMapping("/public/products")
     public ResponseEntity<ProductResponse> getAllProducts(

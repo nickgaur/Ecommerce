@@ -25,6 +25,7 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
+
     @Autowired
     private CategoryRepository categoryRepository;
 
@@ -49,9 +50,9 @@ public class ProductServiceImpl implements ProductService {
         List<ProductDTO> productDTOS = foundProducts.stream()
                 .map(product -> modelMapper.map(product, ProductDTO.class))
                 .toList();
-        if (foundProducts.isEmpty()) {
-            throw new APIException("No Products Exist!!");
-        }
+//        if (foundProducts.isEmpty()) {
+//            throw new APIException("No Products Exist!!");
+//        }
         ProductResponse productResponse = new ProductResponse();
         productResponse.setContent(productDTOS);
         productResponse.setPageNumber(pageProducts.getNumber());
@@ -62,7 +63,6 @@ public class ProductServiceImpl implements ProductService {
         return productResponse;
     }
 
-    @Override
     public ProductDTO addProduct(ProductDTO productDTO, Long categoryId) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> {
             throw new ResourceNotFoundException("Category", "CategoryId", categoryId);
