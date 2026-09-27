@@ -138,3 +138,18 @@ Difference between WebSecurityCutomizer & FilterChain
 -----------------------------------------------------------------
 WebSecurityCustomizer defined at Global level which completely bypass the spring security. i.e. Spirng security will never come into picture for the defined URLs.
 whereas, FilterChain creates set of rules in which first spring security comes into picture and checks whether the url is accessible to public and whether it requires authentication or permit to all.
+
+
+@Slf4j
+-------
+This is Simple Logging Framework for JAVA. We can use this for logging purpose.
+
+
+filterChain.doFilter()
+-----------------------
+it will move you to the next filter in the filter chain i.e. it will move us forward in the filter chain.
+
+
+HandlerExceptionResolver
+----------------------------
+if we are getting any exception at different layers (In Filters), That is we did not reached to our controllers yet. So These exception can't be handled by our Global Exception Handler. So For this we need to pass the exception to our Controller (Next Layer). And this can be done through HandlerExceptionResolver.
